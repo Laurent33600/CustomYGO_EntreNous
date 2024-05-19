@@ -44,15 +44,15 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
--- Custom strings for effect descriptions
-if not s.Stringid then
-    s.Stringid = {
-        [0] = "Lorsque cette carte est invoquée Normalement : ajoutez une Carte Piège 'Fiole Disparue' de votre Deck à votre Main, ou bannissez-la.",
-        [1] = "Ajouter à la main",
-        [2] = "Bannir"
-    }
-end
-
-function aux.Stringid(id, index)
-    return s.Stringid[index]
+-- Add descriptions
+if not s.custom_strings_loaded then
+    s.custom_strings_loaded = true
+    aux.Stringid = function(id, index)
+        local custom_strings = {
+            [0] = "Lorsque cette carte est invoquée Normalement : ajoutez une Carte Piège 'Fiole Disparue' de votre Deck à votre Main, ou bannissez-la.",
+            [1] = "Ajouter à la main",
+            [2] = "Bannir"
+        }
+        return custom_strings[index]
+    end
 end
