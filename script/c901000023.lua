@@ -13,27 +13,34 @@ function s.initial_effect(c)
 end
 
 function s.filter(c)
-    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToRemove())
+    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+    Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
-    local op=0
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EFFECT)
-    op=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+    local op=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
     
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
     local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
     local tc=g:GetFirst()
     if tc then
         if op==0 then
-            Duel.SendtoHand(tc,nil,REASON_EFFECT)
-            Duel.ConfirmCards(1-tp,tc)
+            -- Option 1: Add to hand
+            if tc:IsAbleToHand() then
+                Duel.SendtoHand(tc,nil,REASON_EFFECT)
+                Duel.ConfirmCards(1-tp,tc)
+            end
         else
-            Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+            -- Option 2: Banish
+            if tc:IsAbleToRemove() then
+                Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
+            end
         end
     end
 end
