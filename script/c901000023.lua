@@ -12,7 +12,7 @@ function s.initial_effect(c)
 end
 
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-    return eg:IsExists(Card.IsControler,1,nil,tp) and e:GetHandler():IsPreviousLocation(LOCATION_HAND)
+    return Duel.GetTurnPlayer()==tp and e:GetHandler():IsPreviousLocation(LOCATION_HAND)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
