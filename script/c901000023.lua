@@ -1,4 +1,4 @@
---Alambic de la Fiole Disparue
+--Soupçon de la Fiole Disparue
 local s,id=GetID()
 function s.initial_effect(c)
 	--tohand
