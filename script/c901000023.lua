@@ -43,15 +43,3 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
         end
     end
 end
-
-if not s.custom_strings_loaded then
-    s.custom_strings_loaded = true
-    aux.Stringid = function(id, index)
-        local custom_strings = {
-            [0] = "When this card is Normal Summoned: Add 1 'Disappeared Vial' Trap Card from your Deck to your hand, or banish it.",
-            [1] = "Add to hand",
-            [2] = "Banish"
-        }
-        return custom_strings[index]
-    end
-end
