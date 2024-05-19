@@ -18,23 +18,17 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.filter,tp,LOCATION_DECK,0,1,nil) end
-    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-    Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
+    local op=0
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EFFECT)
+    op=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+    
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
     local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
     local tc=g:GetFirst()
     if tc then
-        local op=0
-        if tc:IsAbleToHand() and tc:IsAbleToRemove() then
-            op=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-        elseif tc:IsAbleToHand() then
-            op=Duel.SelectOption(tp,aux.Stringid(id,1))
-        else
-            op=Duel.SelectOption(tp,aux.Stringid(id,2))
-        end
         if op==0 then
             Duel.SendtoHand(tc,nil,REASON_EFFECT)
             Duel.ConfirmCards(1-tp,tc)
