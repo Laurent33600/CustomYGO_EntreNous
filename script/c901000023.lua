@@ -17,22 +17,21 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
-    e:SetCategory(CATEGORY_TOHAND)
-    e:SetOperation(s.addToHand)
+    e:SetCategory(CATEGORY_REMOVE)
+    e:SetOperation(s.banish)
 end
 
-function s.addToHand(e,tp,eg,ep,ev,re,r,rp)
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+function s.banish(e,tp,eg,ep,ev,re,r,rp)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
     local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
     local tc=g:GetFirst()
     if tc then
-        if tc:IsAbleToHand() then
-            Duel.SendtoHand(tc,nil,REASON_EFFECT)
-            Duel.ConfirmCards(1-tp,tc)
+        if tc:IsAbleToRemove() then
+            Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
         end
     end
 end
 
 function s.filter(c)
-    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and c:IsAbleToHand()
+    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and c:IsAbleToRemove()
 end
