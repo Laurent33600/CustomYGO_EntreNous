@@ -6,7 +6,7 @@ function s.chainfilter(re,tp,cid)
 end
 
 function s.condition(e,tp,eg,ep,ev,re,r,rp)
-	return Duel.GetCustomActivityCount(id,1-tp,ACTIVITY_CHAIN)~=0
+	return Duel.GetCurrentPhase() == PHASE_SUMMON and e:GetHandler():IsPreviousLocation(LOCATION_HAND)
 end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
