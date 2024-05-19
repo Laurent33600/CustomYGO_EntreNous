@@ -3,7 +3,6 @@
 
 local s, id = GetID()
 
--- Define functions for "Soupcon de la Fiole Disparue"
 function s.initial_effect(c)
     -- Add "Fiole Disparue" archetype setcode
     local e1 = Effect.CreateEffect(c)
@@ -11,7 +10,7 @@ function s.initial_effect(c)
     e1:SetCode(EFFECT_ADD_SETCODE)
     e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
     e1:SetRange(LOCATION_MZONE)
-    e1:SetValue(3856)
+    e1:SetValue(0x3856)
     c:RegisterEffect(e1)
 
     -- Effect 1: When this card is Normal Summoned: add 1 "Fiole Disparue" Trap Card from your Deck to your hand, or banish it.
@@ -29,36 +28,24 @@ end
 
 -- Effect 1: Target and operation functions
 function s.thfilter(c)
-    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and c:IsAbleToHand()
+    return c:IsSetCard(0x3856) and c:IsType(TYPE_TRAP) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
-    local sel=0
-    if Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) then
-        sel=Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
-    else
-        sel=Duel.SelectOption(tp,aux.Stringid(id,2))+1
-    end
-    e:SetLabel(sel)
-    if sel==0 then
-        Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
-    else
-        Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
-    end
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-    local sel=e:GetLabel()
-    if sel==0 then
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-        local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
-        if g:GetCount()>0 then
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_OPTION)
+    local option = Duel.SelectOption(tp,aux.Stringid(id,1),aux.Stringid(id,2))
+    if option == 0 then
+        local g = Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+        if #g > 0 then
             Duel.SendtoHand(g,nil,REASON_EFFECT)
             Duel.ConfirmCards(1-tp,g)
         end
     else
-        Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-        local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
-        if g:GetCount()>0 then
+        local g = Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+        if #g > 0 then
             Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
         end
     end
