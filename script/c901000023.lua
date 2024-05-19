@@ -17,24 +17,13 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return true end
-    Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,0))
-    local options = {
-        [1] = {desc = aux.Stringid(id,1), code = 1}, -- Add to hand
-        [2] = {desc = aux.Stringid(id,2), code = 2}  -- Banish
-    }
-
-    local optionText = {}
-    for i, option in ipairs(options) do
-        table.insert(optionText, option.desc)
-    end
-
-    local selectedOption = Duel.SelectOption(tp,table.unpack(optionText)) + 1
-
-    local op = options[selectedOption].code
-    if op == 1 then
+    local ops={aux.Stringid(id,1),aux.Stringid(id,2)}
+    local op=Duel.SelectOption(tp,table.unpack(ops))
+    e:SetLabel(op+1)
+    if op+1==1 then
         e:SetCategory(CATEGORY_TOHAND)
         e:SetOperation(s.addToHand)
-    elseif op == 2 then
+    elseif op+1==2 then
         e:SetCategory(CATEGORY_REMOVE)
         e:SetOperation(s.banish)
     end
