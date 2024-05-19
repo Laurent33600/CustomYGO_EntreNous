@@ -1,4 +1,4 @@
---Soupçon de la Fiole Disparue
+-- Soupçon de la Fiole Disparue
 local s,id=GetID()
 function s.initial_effect(c)
     -- Search or Banish
@@ -23,7 +23,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 function s.operation(e,tp,eg,ep,ev,re,r,rp)
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_EFFECT)
     local g=Duel.SelectMatchingCard(tp,s.filter,tp,LOCATION_DECK,0,1,1,nil)
     local tc=g:GetFirst()
     if tc then
@@ -42,4 +42,17 @@ function s.operation(e,tp,eg,ep,ev,re,r,rp)
             Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
         end
     end
+end
+
+-- Custom strings for effect descriptions
+if not s.Stringid then
+    s.Stringid = {
+        [0] = "Lorsque cette carte est invoquée Normalement : ajoutez une Carte Piège 'Fiole Disparue' de votre Deck à votre Main, ou bannissez-la.",
+        [1] = "Ajouter à la main",
+        [2] = "Bannir"
+    }
+end
+
+function aux.Stringid(id, index)
+    return s.Stringid[index]
 end
