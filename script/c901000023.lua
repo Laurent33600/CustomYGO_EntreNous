@@ -10,6 +10,18 @@ function s.initial_effect(c)
 	e1:SetTarget(s.target)
 	c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.chainfilter)
+
+	-- Add effect upon Normal Summon
+	local e2=Effect.CreateEffect(c)
+	e2:SetDescription(aux.Stringid(id,4))
+	e2:SetCategory(CATEGORY_SPECIAL_SUMMON)
+	e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
+	e2:SetRange(LOCATION_MZONE)
+	e2:SetCode(EVENT_SUMMON_SUCCESS)
+	e2:SetCountLimit(1,id+100)
+	e2:SetTarget(s.sptg)
+	e2:SetOperation(s.spop)
+	c:RegisterEffect(e2)
 end
 
 function s.chainfilter(re,tp,cid)
@@ -65,4 +77,13 @@ end
 
 function s.filter(c)
 	return c:IsSetCard(3856) and c:IsType(TYPE_TRAP)
+end
+
+function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():GetFlagEffect(id)==0 end
+	e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD,0,1)
+end
+
+function s.spop(e,tp,eg,ep,ev,re,r,rp)
+	-- Add your special summoning logic here
 end
