@@ -20,18 +20,16 @@ function s.filter(c)
     return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToRemove())
 end
 
-function s.target(e, tp, eg, ep, ev, re, r, rp, chk, chkc)
-    if chkc then return chkc:IsLocation(LOCATION_DECK) and chkc:IsControler(tp) and s.filter(chkc) end
-    if chk == 0 then return Duel.IsExistingTarget(s.filter, tp, LOCATION_DECK, 0, 1, nil) end
-    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_TARGET)
-    local g = Duel.SelectTarget(tp, s.filter, tp, LOCATION_DECK, 0, 1, 1, nil)
-    Duel.SetOperationInfo(0, CATEGORY_TOHAND, g, 1, 0, 0)
-    Duel.SetOperationInfo(0, CATEGORY_REMOVE, g, 1, 0, 0)
+function s.target(e, tp, eg, ep, ev, re, r, rp, chk)
+    if chk == 0 then return Duel.IsExistingMatchingCard(s.filter, tp, LOCATION_DECK, 0, 1, nil) end
 end
 
 function s.operation(e, tp, eg, ep, ev, re, r, rp)
-    local tc = Duel.GetFirstTarget()
-    if tc and tc:IsRelateToEffect(e) then
+    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_ATOHAND)
+    local g = Duel.SelectMatchingCard(tp, s.filter, tp, LOCATION_DECK, 0, 1, 1, nil)
+    if #g > 0 then
+        local tc = g:GetFirst()
+        Duel.HintSelection(g)
         local b1 = tc:IsAbleToHand()
         local b2 = tc:IsAbleToRemove()
         local op = 0
