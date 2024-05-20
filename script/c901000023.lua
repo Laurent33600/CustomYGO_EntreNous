@@ -7,8 +7,8 @@ function s.initial_effect(c)
     -- When this card is Normal Summoned: add 1 "Fiole Disparue" Trap Card from your Deck to your hand, or banish it.
     local e1 = Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id, 0))
-    e1:SetCategory(CATEGORY_TOHAND + CATEGORY_REMOVE)
-    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
+    e1:SetCategory(CATEGORY_TOHAND + CATEGORY_REMOVE + CATEGORY_SEARCH)
+    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_F)
     e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetCountLimit(1, id)
     e1:SetTarget(s.target)
@@ -17,7 +17,7 @@ function s.initial_effect(c)
 end
 
 function s.filter(c)
-    return c:IsSetCard(0x3856) and c:IsType(TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToRemove())
+    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToRemove())
 end
 
 function s.target(e, tp, eg, ep, ev, re, r, rp, chk)
