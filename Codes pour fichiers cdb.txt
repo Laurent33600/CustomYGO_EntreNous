@@ -1,0 +1,122 @@
+Card Fields and Their IDs (Decimal Format)
+id: The unique identifier for the card.
+ot: The original type of the card, indicating where it was printed (e.g., TCG, OCG).
+alias: Used for cards treated as other cards (e.g., "Harpie Lady" cards).
+setcode: The code for the card’s archetype or set.
+type: A bit field that defines the card type(s) (e.g., Monster, Spell, Trap).
+atk: The card's attack points (for monsters).
+def: The card's defense points (for monsters).
+level: The card's level (for monsters) or rank (for Xyz Monsters) or link rating (for Link Monsters).
+race: The card's race/type (e.g., Warrior, Dragon, Spellcaster).
+attribute: The card's attribute (e.g., LIGHT, DARK, FIRE).
+category: A bit field for the card's categories (e.g., Normal Monster, Effect Monster, Ritual Monster).
+name: The card's name.
+desc: The card's description or effect text.
+str1: Not commonly used, reserved for additional strings or effects.
+str2: Not commonly used, reserved for additional strings or effects.
+str3: Not commonly used, reserved for additional strings or effects.
+str4: Not commonly used, reserved for additional strings or effects.
+str5: Not commonly used, reserved for additional strings or effects.
+str6: Not commonly used, reserved for additional strings or effects.
+str7: Not commonly used, reserved for additional strings or effects.
+str8: Not commonly used, reserved for additional strings or effects.
+
+Detailed Explanation of Key Fields (Decimal Format)
+id: This is a unique number assigned to each card. When creating custom cards, ensure each card has a unique ID.
+
+ot:
+0: TCG
+1: OCG
+2: Both TCG and OCG
+32: Custom
+
+type: This is a bit field that defines the card type(s):
+1: Monster (0x1)
+2: Spell (0x2)
+4: Trap (0x4)
+16: Normal Monster (0x10)
+32: Effect Monster (0x20)
+64: Fusion Monster (0x40)
+128: Ritual Monster (0x80)
+512: Spirit Monster (0x200)
+1024: Union Monster (0x400)
+2048: Gemini Monster (0x800)
+4096: Tuner Monster (0x1000)
+8192: Synchro Monster (0x2000)
+16384: Token (0x4000)
+32768: Quick-Play Spell (0x8000)
+65536: Continuous Spell (0x10000)
+131072: Equip Spell (0x20000)
+262144: Field Spell (0x40000)
+524288: Counter Trap (0x80000)
+1048576: Flip Monster (0x100000)
+2097152: Toons (0x200000)
+4194304: Xyz Monster (0x400000)
+8388608: Pendulum Monster (0x800000)
+16777216: Link Monster (0x1000000)
+Combine these values to specify multiple types (e.g., a Pendulum Monster with Xyz attributes).
+
+race: This defines the monster’s race/type:
+1: Warrior (0x1)
+2: Spellcaster (0x2)
+4: Fairy (0x4)
+8: Fiend (0x8)
+16: Zombie (0x10)
+32: Machine (0x20)
+64: Aqua (0x40)
+128: Pyro (0x80)
+256: Rock (0x100)
+512: Winged Beast (0x200)
+1024: Plant (0x400)
+2048: Insect (0x800)
+4096: Thunder (0x1000)
+8192: Dragon (0x2000)
+16384: Beast (0x4000)
+32768: Beast-Warrior (0x8000)
+65536: Dinosaur (0x10000)
+131072: Fish (0x20000)
+262144: Sea Serpent (0x40000)
+524288: Reptile (0x80000)
+1048576: Psychic (0x100000)
+2097152: Divine-Beast (0x200000)
+4194304: Creator God (0x400000)
+8388608: Wyrm (0x800000)
+16777216: Cyberse (0x1000000)
+
+attribute: This defines the monster’s attribute:
+1: EARTH (0x1)
+2: WATER (0x2)
+4: FIRE (0x4)
+8: WIND (0x8)
+16: LIGHT (0x10)
+32: DARK (0x20)
+64: DIVINE (0x40)
+
+category: This is a bit field defining the card’s categories. Similar to type, multiple values can be combined to specify more than one category.
+Draw: 2
+Search: 4
+Destroy: 8
+Send to Graveyard: 16
+Remove from Play: 32
+Return to Hand: 64
+Return to Deck: 128
+Special Summon: 256
+Change Control: 512
+Equip: 1024
+Flip: 2048
+To Graveyard: 4096
+Discard: 8192
+Chain: 16384
+Fusion: 32768
+Ritual: 65536
+Synchro: 131072
+Xyz: 262144
+Negate: 524288
+Counter: 1048576
+Activate: 2097152
+Draw Phase: 4194304
+Standby Phase: 8388608
+Main Phase 1: 16777216
+Battle Phase: 33554432
+Main Phase 2: 67108864
+End Phase: 134217728
