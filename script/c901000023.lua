@@ -16,33 +16,36 @@ function s.initial_effect(c)
     c:RegisterEffect(e1)
 end
 
-function s.filter(c)
-    return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and (c:IsAbleToHand() or c:IsAbleToRemove())
+function s.filter(c, opt)
+    if opt == 0 then
+        return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and c:IsAbleToHand()
+    else
+        return c:IsSetCard(3856) and c:IsType(TYPE_TRAP) and c:IsAbleToRemove()
+    end
 end
 
 function s.target(e, tp, eg, ep, ev, re, r, rp, chk)
-    if chk == 0 then return Duel.IsExistingMatchingCard(s.filter, tp, LOCATION_DECK, 0, 1, nil) end
-    Duel.SetOperationInfo(0, CATEGORY_TOHAND, nil, 1, tp, LOCATION_DECK)
-    Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, tp, LOCATION_DECK)
+    if chk == 0 then return true end
 end
 
 function s.operation(e, tp, eg, ep, ev, re, r, rp)
+    local op = 0
+    local b1 = Duel.IsExistingMatchingCard(s.filter, tp, LOCATION_DECK, 0, 1, nil, 0)
+    local b2 = Duel.IsExistingMatchingCard(s.filter, tp, LOCATION_DECK, 0, 1, nil, 1)
+    if b1 and b2 then
+        op = Duel.SelectOption(tp, aux.Stringid(id, 0), aux.Stringid(id, 1))
+    elseif b1 then
+        op = Duel.SelectOption(tp, aux.Stringid(id, 0))
+    elseif b2 then
+        op = Duel.SelectOption(tp, aux.Stringid(id, 1)) + 1
+    else
+        return
+    end
+
     Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_ATOHAND)
-    local g = Duel.SelectMatchingCard(tp, s.filter, tp, LOCATION_DECK, 0, 1, 1, nil)
+    local g = Duel.SelectMatchingCard(tp, s.filter, tp, LOCATION_DECK, 0, 1, 1, nil, op)
     if #g > 0 then
         local tc = g:GetFirst()
-        local b1 = tc:IsAbleToHand()
-        local b2 = tc:IsAbleToRemove()
-        local op = 0
-        if b1 and b2 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 0), aux.Stringid(id, 1))
-        elseif b1 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 0))
-        elseif b2 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 1)) + 1
-        else
-            return
-        end
         if op == 0 then
             Duel.SendtoHand(tc, nil, REASON_EFFECT)
             Duel.ConfirmCards(1 - tp, tc)
