@@ -8,7 +8,7 @@ function s.initial_effect(c)
     local e1 = Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id, 0))
     e1:SetCategory(CATEGORY_TOHAND + CATEGORY_REMOVE + CATEGORY_SEARCH)
-    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_F)
+    e1:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
     e1:SetCode(EVENT_SUMMON_SUCCESS)
     e1:SetCountLimit(1, id)
     e1:SetTarget(s.target)
@@ -35,11 +35,11 @@ function s.operation(e, tp, eg, ep, ev, re, r, rp)
         local b2 = tc:IsAbleToRemove()
         local op = 0
         if b1 and b2 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 1), aux.Stringid(id, 2))
+            op = Duel.SelectOption(tp, aux.Stringid(id, 0), aux.Stringid(id, 1))
         elseif b1 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 1))
+            op = Duel.SelectOption(tp, aux.Stringid(id, 0))
         elseif b2 then
-            op = Duel.SelectOption(tp, aux.Stringid(id, 2)) + 1
+            op = Duel.SelectOption(tp, aux.Stringid(id, 1)) + 1
         else
             return
         end
