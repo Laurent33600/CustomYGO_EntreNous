@@ -29,7 +29,7 @@ function s.initial_effect(c)
 end
 
 function s.spcon(e, tp, eg, ep, ev, re, r, rp)
-    return Duel.IsExistingMatchingCard(aux.FilterFaceupFunction(Card.IsType, TYPE_TRAP), tp, LOCATION_GRAVE, 0, 1, nil)
+    return Duel.IsExistingMatchingCard(aux.FaceupFilter(Card.IsType, TYPE_TRAP), tp, LOCATION_GRAVE, 0, 1, nil)
 end
 
 function s.sptg(e, tp, eg, ep, ev, re, r, rp, chk)
