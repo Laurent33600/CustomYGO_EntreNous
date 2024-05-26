@@ -20,7 +20,6 @@ function s.initial_effect(c)
     e2:SetRange(LOCATION_MZONE)
     e2:SetCode(EFFECT_IMMUNE_EFFECT)
     e2:SetValue(s.efilter)
-    e2:SetCondition(s.immcon)
     c:RegisterEffect(e2)
 
     -- Banish Spell/Trap
@@ -60,10 +59,6 @@ end
 
 function s.efilter(e,te)
     return te:IsActiveType(TYPE_TRAP) and te:GetOwnerPlayer()~=e:GetHandlerPlayer()
-end
-
-function s.immcon(e)
-    return Duel.IsExistingMatchingCard(s.cfilter,e:GetHandlerPlayer(),LOCATION_MZONE,0,1,nil)
 end
 
 function s.rmtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)

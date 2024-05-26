@@ -3,9 +3,10 @@
 
 local s,id=GetID()
 function s.initial_effect(c)
-    -- Special Summon if Trap activated
+    -- Special Summon condition
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
+    e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
     e1:SetType(EFFECT_TYPE_QUICK_O)
     e1:SetCode(EVENT_FREE_CHAIN)
     e1:SetRange(LOCATION_HAND)
@@ -18,18 +19,21 @@ function s.initial_effect(c)
     -- Negate effects
     local e2=Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id,1))
-    e2:SetCategory(CATEGORY_DISABLE)
+    e2:SetCategory(CATEGORY_NEGATE)
     e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-    e2:SetCode(EVENT_SPSUMMON_SUCCESS)
+    e2:SetCode(EVENT_SUMMON_SUCCESS)
     e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
-    e2:SetCountLimit(1,{id,1})
+    e2:SetCountLimit(1,id+1)
     e2:SetTarget(s.negtg)
     e2:SetOperation(s.negop)
     c:RegisterEffect(e2)
+    local e3=e2:Clone()
+    e3:SetCode(EVENT_SPSUMMON_SUCCESS)
+    c:RegisterEffect(e3)
 end
 
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.GetCurrentPhase()==PHASE_MAIN1 or Duel.GetCurrentPhase()==PHASE_MAIN2
+    return Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_GRAVE,0,1,nil,TYPE_TRAP)
 end
 
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -44,22 +48,17 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     end
 end
 
-function s.negfilter(c)
-    return c:IsFaceup() and not c:IsDisabled()
-end
-
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-    if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) and s.negfilter(chkc) end
-    if chk==0 then return Duel.IsExistingTarget(s.negfilter,tp,0,LOCATION_MZONE,1,nil) end
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-    local g=Duel.SelectTarget(tp,s.negfilter,tp,0,LOCATION_MZONE,1,1,nil)
-    Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
+    if chkc then return chkc:IsControler(1-tp) and chkc:IsLocation(LOCATION_MZONE) end
+    if chk==0 then return Duel.IsExistingTarget(nil,tp,0,LOCATION_MZONE,1,nil) end
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
+    local g=Duel.SelectTarget(tp,nil,tp,0,LOCATION_MZONE,1,1,nil)
+    Duel.SetOperationInfo(0,CATEGORY_NEGATE,g,1,0,0)
 end
 
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
     local tc=Duel.GetFirstTarget()
-    if tc and tc:IsFaceup() and tc:IsRelateToEffect(e) then
-        Duel.NegateRelatedChain(tc,RESET_TURN_SET)
+    if tc and tc:IsRelateToEffect(e) and tc:IsFaceup() then
         local e1=Effect.CreateEffect(e:GetHandler())
         e1:SetType(EFFECT_TYPE_SINGLE)
         e1:SetCode(EFFECT_DISABLE)
