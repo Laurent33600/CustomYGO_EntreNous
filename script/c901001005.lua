@@ -5,13 +5,13 @@ local s,id=GetID()
 function s.initial_effect(c)
     -- Special Summon condition
     local e1=Effect.CreateEffect(c)
-    e1:SetType(EFFECT_TYPE_QUICK_O)
-    e1:SetCode(EVENT_FREE_CHAIN)
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_SPSUMMON_PROC)
     e1:SetRange(LOCATION_HAND)
     e1:SetCondition(s.spcon)
     e1:SetTarget(s.sptg)
-    e1:SetOperation(s.spop)
     c:RegisterEffect(e1)
+	Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.chainfilter)
     
     -- Activate Trap from Deck
     local e2=Effect.CreateEffect(c)
@@ -29,20 +29,21 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 
-function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return Duel.IsExistingMatchingCard(Card.IsType,tp,LOCATION_GRAVE,0,1,nil,TYPE_TRAP)
+function s.chainfilter(re,tp,cid)
+	return not re:IsHasType(EFFECT_TYPE_ACTIVATE) or not re:IsActiveType(TYPE_TRAP)
 end
+
+function s.hspcon(e,c)
+	if c==nil then return true end
+	local tp=c:GetControler()
+	return Duel.GetCustomActivityCount(id,tp,ACTIVITY_CHAIN)>0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+end
+
 
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.GetLocationCount(tp,LOCATION_MZONE)>0
         and e:GetHandler():IsCanBeSpecialSummoned(e,0,tp,false,false) end
     Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,e:GetHandler(),1,0,0)
-end
-
-function s.spop(e,tp,eg,ep,ev,re,r,rp)
-    if e:GetHandler():IsRelateToEffect(e) then
-        Duel.SpecialSummon(e:GetHandler(),0,tp,tp,false,false,POS_FACEUP)
-    end
 end
 
 function s.actg(e,tp,eg,ep,ev,re,r,rp,chk)
