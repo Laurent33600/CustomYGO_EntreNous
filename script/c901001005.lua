@@ -9,7 +9,6 @@ function s.initial_effect(c)
     e1:SetCode(EFFECT_SPSUMMON_PROC)
     e1:SetRange(LOCATION_HAND)
     e1:SetCondition(s.spcon)
-    e1:SetTarget(s.sptg)
     c:RegisterEffect(e1)
 	Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.chainfilter)
     
