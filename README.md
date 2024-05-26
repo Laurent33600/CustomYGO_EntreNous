@@ -10,3 +10,4 @@ Cartes fonctionnelles :
 1 :
 	- Soupçon (023)
 	- Bouclier (004) - protection des synchro?
+	- Fumée (013)
