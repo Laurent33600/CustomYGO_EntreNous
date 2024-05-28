@@ -9,6 +9,7 @@ Based on your provided details, the key fields and their IDs for EDOPro's .cdb f
    - 1: OCG
    - 2: Both TCG and OCG
    - 32: Custom
+
 3. **alias**: Used for cards treated as other cards.
 4. **setcode**: Code for the card’s archetype or set.
 5. **type**: Bit field defining the card type(s).
