@@ -52,29 +52,23 @@ function s.sprop(e, tp, eg, ep, ev, re, r, rp, c)
 end
 
 function s.atkcon(e,tp,eg,ep,ev,re,r,rp)
-    return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
+    return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 
 function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_DECK,0,1,nil) end
+    Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, tp, LOCATION_DECK)
 end
 
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
     local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_DECK,0,1,1,nil)
-    if #g>0 then
-        Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
-        local c=e:GetHandler()
-        if c:IsRelateToEffect(e) and c:IsFaceup() then
-            local atk=g:GetFirst():GetBaseAttack()
-            if atk>0 then
-                local e1=Effect.CreateEffect(c)
-                e1:SetType(EFFECT_TYPE_SINGLE)
-                e1:SetCode(EFFECT_UPDATE_ATTACK)
-                e1:SetValue(atk+300)
-                e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-                c:RegisterEffect(e1)
-            end
-        end
+    if #g>0 and Duel.Remove(g, POS_FACEUP, REASON_EFFECT) > 0 then
+        local e1 = Effect.CreateEffect(e:GetHandler())
+        e1:SetType(EFFECT_TYPE_SINGLE)
+        e1:SetCode(EFFECT_UPDATE_ATTACK)
+        e1:SetValue(+300)
+        e1:SetReset(RESET_PHASE + PHASE_END)
+        c:RegisterEffect(e1,tp)
     end
 end
