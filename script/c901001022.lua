@@ -1,7 +1,8 @@
 -- Souffle de la Fiole Disparue
 -- Scripted by [Your Name or Username]
 
-local s,id=GetID()
+local s, id = GetID()
+
 function s.initial_effect(c)
     -- Synchro summon
     Synchro.AddProcedure(c, nil, 1, 1, Synchro.NonTuner(nil), 1, 99)
@@ -16,10 +17,10 @@ function s.initial_effect(c)
     e1:SetOperation(s.sprop)
     c:RegisterEffect(e1)
     -- ATK increase
-    local e2=Effect.CreateEffect(c)
-    e2:SetDescription(aux.Stringid(id,0))
-    e2:SetCategory(CATEGORY_REMOVE+CATEGORY_ATKCHANGE)
-    e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
+    local e2 = Effect.CreateEffect(c)
+    e2:SetDescription(aux.Stringid(id, 0))
+    e2:SetCategory(CATEGORY_ATKCHANGE + CATEGORY_REMOVE)
+    e2:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SPSUMMON_SUCCESS)
     e2:SetProperty(EFFECT_FLAG_DELAY)
     e2:SetCondition(s.atkcon)
@@ -51,24 +52,24 @@ function s.sprop(e, tp, eg, ep, ev, re, r, rp, c)
     Duel.Remove(g1, POS_FACEUP, REASON_COST)
 end
 
-function s.atkcon(e,tp,eg,ep,ev,re,r,rp)
+function s.atkcon(e, tp, eg, ep, ev, re, r, rp)
     return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 
-function s.atktg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove,tp,LOCATION_DECK,0,1,nil) end
+function s.atktg(e, tp, eg, ep, ev, re, r, rp, chk)
+    if chk == 0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove, tp, LOCATION_DECK, 0, 1, nil) end
     Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, tp, LOCATION_DECK)
 end
 
-function s.atkop(e,tp,eg,ep,ev,re,r,rp)
-    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
-    local g=Duel.SelectMatchingCard(tp,Card.IsAbleToRemove,tp,LOCATION_DECK,0,1,1,nil)
-    if #g>0 and Duel.Remove(g, POS_FACEUP, REASON_EFFECT) > 0 then
+function s.atkop(e, tp, eg, ep, ev, re, r, rp)
+    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_REMOVE)
+    local g = Duel.SelectMatchingCard(tp, Card.IsAbleToRemove, tp, LOCATION_DECK, 0, 1, 1, nil)
+    if #g > 0 and Duel.Remove(g, POS_FACEUP, REASON_EFFECT) > 0 then
         local e1 = Effect.CreateEffect(e:GetHandler())
         e1:SetType(EFFECT_TYPE_SINGLE)
         e1:SetCode(EFFECT_UPDATE_ATTACK)
         e1:SetValue(+300)
         e1:SetReset(RESET_PHASE + PHASE_END)
-        c:RegisterEffect(e1,tp)
+        c:RegisterEffect(e1, tp)
     end
 end
