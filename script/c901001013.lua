@@ -1,4 +1,6 @@
 -- Fumée de la Fiole Disparue
+-- Scripted by [Your Name or Username]
+
 local s, id = GetID()
 
 function s.initial_effect(c)
