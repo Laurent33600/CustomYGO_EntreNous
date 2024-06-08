@@ -28,6 +28,29 @@ function s.initial_effect(c)
     c:RegisterEffect(e2)
 end
 
+function s.sprfilter1(c)
+    return c:IsLevel(5) and c:IsType(TYPE_TUNER) and c:IsAbleToRemoveAsCost()
+end
+
+function s.sprfilter2(c)
+    return c:IsType(TYPE_TRAP) and c:IsAbleToRemoveAsCost()
+end
+
+function s.sprcon(e, c)
+    if c == nil then return true end
+    return Duel.IsExistingMatchingCard(s.sprfilter1, c:GetControler(), LOCATION_MZONE, 0, 1, nil)
+        and Duel.IsExistingMatchingCard(s.sprfilter2, c:GetControler(), LOCATION_GRAVE, 0, 1, nil)
+end
+
+function s.sprop(e, tp, eg, ep, ev, re, r, rp, c)
+    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_REMOVE)
+    local g1 = Duel.SelectMatchingCard(tp, s.sprfilter1, tp, LOCATION_MZONE, 0, 1, 1, nil)
+    Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_REMOVE)
+    local g2 = Duel.SelectMatchingCard(tp, s.sprfilter2, tp, LOCATION_GRAVE, 0, 1, 1, nil)
+    g1:Merge(g2)
+    Duel.Remove(g1, POS_FACEUP, REASON_COST)
+end
+
 function s.atkcon(e,tp,eg,ep,ev,re,r,rp)
     return e:GetHandler():IsSummonType(SUMMON_TYPE_SYNCHRO)
 end
