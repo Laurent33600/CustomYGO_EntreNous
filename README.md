@@ -11,3 +11,5 @@ Cartes fonctionnelles :
 	- Soupçon (023)
 	- Bouclier (004) - protection des synchro?
 	- Fumée (013)
+	- Alkelazir (002)
+	- 
