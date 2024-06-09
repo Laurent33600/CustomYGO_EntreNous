@@ -5,22 +5,8 @@ local s,id=GetID()
 
 function s.initial_effect(c)
     -- Count Trap card activations
-    if not s.global_check then
-        s.global_check=true
-        s[0]=0
-        s[1]=0
-        local ge1=Effect.CreateEffect(c)
-        ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-        ge1:SetCode(EVENT_CHAINING)
-        ge1:SetOperation(s.checkop)
-        Duel.RegisterEffect(ge1,0)
-        local ge2=Effect.CreateEffect(c)
-        ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-        ge2:SetCode(EVENT_PHASE+PHASE_END)
-        ge2:SetOperation(s.resetop)
-        Duel.RegisterEffect(ge2,0)
-    end
-
+    Duel.AddCustomActivityCounter(id,ACTIVITY_CHAIN,s.chainfilter)
+    
     -- Special Summon (Quick Effect)
     local e1=Effect.CreateEffect(c)
     e1:SetDescription(aux.Stringid(id,0))
@@ -48,19 +34,12 @@ function s.initial_effect(c)
     c:RegisterEffect(e3)
 end
 
-function s.checkop(e,tp,eg,ep,ev,re,r,rp)
-    if re:IsActiveType(TYPE_TRAP) and re:IsHasType(EFFECT_TYPE_ACTIVATE) then
-        s[ep]=s[ep]+1
-    end
-end
-
-function s.resetop(e,tp,eg,ep,ev,re,r,rp)
-    s[0]=0
-    s[1]=0
+function s.chainfilter(re,tp,cid)
+    return re:IsActiveType(TYPE_TRAP)
 end
 
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
-    return s[tp]>0
+    return Duel.GetCustomActivityCount(id,tp,ACTIVITY_CHAIN) > 0
 end
 
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
