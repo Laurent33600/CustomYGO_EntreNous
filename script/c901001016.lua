@@ -16,7 +16,7 @@ function s.initial_effect(c)
         Duel.RegisterEffect(ge1,0)
         local ge2=Effect.CreateEffect(c)
         ge2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-        ge2:SetCode(EVENT_CHAIN_SOLVED)
+        ge2:SetCode(EVENT_PHASE+PHASE_END)
         ge2:SetOperation(s.resetop)
         Duel.RegisterEffect(ge2,0)
     end
@@ -38,7 +38,7 @@ function s.initial_effect(c)
     e2:SetCategory(CATEGORY_DISABLE)
     e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SUMMON_SUCCESS)
-    e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+    e2:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
     e2:SetCountLimit(1,{id,1})
     e2:SetTarget(s.negtg)
     e2:SetOperation(s.negop)
@@ -55,10 +55,8 @@ function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 end
 
 function s.resetop(e,tp,eg,ep,ev,re,r,rp)
-    if Duel.GetCurrentPhase()==PHASE_END then
-        s[0]=0
-        s[1]=0
-    end
+    s[0]=0
+    s[1]=0
 end
 
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
@@ -71,15 +69,15 @@ end
 
 function s.negtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
     if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) end
-    if chk==0 then return Duel.IsExistingTarget(aux.disfilter1,tp,0,LOCATION_MZONE,1,nil) end
+    if chk==0 then return Duel.IsExistingTarget(Card.IsFaceup,tp,0,LOCATION_MZONE,1,nil) end
     Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_FACEUP)
-    local g=Duel.SelectTarget(tp,aux.disfilter1,tp,0,LOCATION_MZONE,1,1,nil)
+    local g=Duel.SelectTarget(tp,Card.IsFaceup,tp,0,LOCATION_MZONE,1,1,nil)
     Duel.SetOperationInfo(0,CATEGORY_DISABLE,g,1,0,0)
 end
 
 function s.negop(e,tp,eg,ep,ev,re,r,rp)
     local tc=Duel.GetFirstTarget()
-    if tc and tc:IsRelateToEffect(e) and not tc:IsDisabled() then
+    if tc and tc:IsRelateToEffect(e) and tc:IsFaceup() and not tc:IsDisabled() then
         Duel.NegateRelatedChain(tc,RESET_TURN_SET)
         local e1=Effect.CreateEffect(e:GetHandler())
         e1:SetType(EFFECT_TYPE_SINGLE)
