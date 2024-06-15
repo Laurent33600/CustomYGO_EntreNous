@@ -15,7 +15,7 @@ function s.initial_effect(c)
     e1:SetCondition(s.sprcon)
     e1:SetOperation(s.sprop)
     c:RegisterEffect(e1)
-    -- ATK increase
+    -- ATK decrease
     local e2 = Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id, 0))
     e2:SetCategory(CATEGORY_ATKCHANGE)
@@ -56,11 +56,10 @@ end
 
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then
-		local g=Duel.GetDecktopGroup(tp,1)
-		local tc=g:GetFirst()
-		return tc and tc:IsAbleToRemove()
+		g = Duel.SelectMatchingCard(tp, Card.IsAbleToRemove, tp, LOCATION_GRAVE, 0, 1, 1, nil)
+		return g and g:IsAbleToRemove()
 	end
-	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_GRAVE)
 end
 
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
