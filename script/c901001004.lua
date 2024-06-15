@@ -52,8 +52,8 @@ function s.grtg(e, tp, eg, ep, ev, re, r, chk)
     if chk == 0 then return Duel.IsExistingMatchingCard(s.grfilter, tp, LOCATION_DECK, 0, 1, nil) end
 end
 
-function s.tgt(c)
-    return c:IsSynchroMonster() and c:IsSetCard(3856)
+function s.tgt(e,c)
+    return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(3856)
 end
 
 function s.grfilter(c)
