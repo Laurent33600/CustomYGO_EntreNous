@@ -38,31 +38,22 @@ function s.actcon(e)
 end
 
 function s.operation(e, tp, eg, ep, ev, re, r, rp)
-    local g = Duel.GetMatchingGroup(Card.IsFaceup, tp, LOCATION_MZONE, 0, nil)
-    local tc = g:GetFirst()
-    while tc do
-        if tc:IsSetCard(3856) and tc:IsType(TYPE_SYNCHRO) then
-            local e1 = Effect.CreateEffect(e:GetHandler())
-            e1:SetType(EFFECT_TYPE_SINGLE)
-            e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-            e1:SetTargetRange(LOCATION_MZONE,0)
-            e1:SetTarget(aux.TargetBoolFunction(Card.IsType,TYPE_SYNCHRO))
-            e1:SetReset(RESET_EVENT + RESETS_STANDARD + RESET_PHASE + PHASE_END)
-            e1:SetValue(1)
-            tc:RegisterEffect(e1)
-            local e2 = Effect.CreateEffect(e:GetHandler())
-            e2:SetType(EFFECT_TYPE_SINGLE)
-            e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-            e2:SetValue(1)
-            e2:SetReset(RESET_EVENT + RESETS_STANDARD + RESET_PHASE + PHASE_END)
-            tc:RegisterEffect(e2)
-        end
-        tc = g:GetNext()
-    end
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
+    e1:SetTargetRange(LOCATION_MZONE,0)
+    e1:SetTarget(s.tgt)
+    e1:SetReset(RESET_PHASE + PHASE_END)
+    e1:SetValue(1)
+    Duel.RegisterEffect(e1,tp)
 end
 
 function s.grtg(e, tp, eg, ep, ev, re, r, chk)
     if chk == 0 then return Duel.IsExistingMatchingCard(s.grfilter, tp, LOCATION_DECK, 0, 1, nil) end
+end
+
+function s.tgt(c)
+    return c:IsSynchroMonster() and c:IsSetCard(3856)
 end
 
 function s.grfilter(c)
