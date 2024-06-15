@@ -46,14 +46,22 @@ function s.operation(e, tp, eg, ep, ev, re, r, rp)
     e1:SetReset(RESET_PHASE + PHASE_END)
     e1:SetValue(1)
     Duel.RegisterEffect(e1,tp)
-end
-
-function s.grtg(e, tp, eg, ep, ev, re, r, chk)
-    if chk == 0 then return Duel.IsExistingMatchingCard(s.grfilter, tp, LOCATION_DECK, 0, 1, nil) end
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_FIELD)
+    e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
+    e2:SetTargetRange(LOCATION_MZONE,0)
+    e2:SetTarget(s.tgt)
+    e2:SetReset(RESET_PHASE + PHASE_END)
+    e2:SetValue(1)
+    Duel.RegisterEffect(e2,tp)
 end
 
 function s.tgt(e,c)
     return c:IsType(TYPE_SYNCHRO) and c:IsSetCard(3856)
+end
+
+function s.grtg(e, tp, eg, ep, ev, re, r, chk)
+    if chk == 0 then return Duel.IsExistingMatchingCard(s.grfilter, tp, LOCATION_DECK, 0, 1, nil) end
 end
 
 function s.grfilter(c)
