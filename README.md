@@ -8,8 +8,27 @@ Archétypes :
 
 Cartes fonctionnelles :
 1 :
-	- Soupçon (023)
+	- Alambic (001) - NON
+	- Alkelazir (002) - OK
+	- Atelier (003) - NON
 	- Bouclier (004) - protection des synchro -> non
-	- Fumée (013)
-	- Alkelazir (002)
-	- Souffle (022)
+	- Catalyseur (005) - NON
+	- Chaudron (006) - NON
+	- Cristal (007) - NON
+	- Distillat (008) - NON
+	- Ectoplasme (009) - NON
+	- Expériences (010) - NON
+	- Fluide (011) - NON
+	- Fumerolle (012) - NON
+	- Fumée (013) - invoq ok, pas effet
+	- Fiole (014) - NON
+	- Laboratoire (015) - NON
+	- Ombre (016) - NON
+	- Pouvoir (017) - NON
+	- Réaction (018) - NON
+	- Réservoir (019) - NON
+	- Rites (020) - NON
+	- Sacrifice (021) - NON
+	- Souffle (022) - OK
+	- Soupçon (023) - OK
+	- Vapeur (024) - NON
