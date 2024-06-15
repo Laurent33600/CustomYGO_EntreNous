@@ -66,8 +66,7 @@ end
 function s.atkop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_REMOVE)
     local g = Duel.SelectMatchingCard(tp, Card.IsAbleToRemove, tp, LOCATION_GRAVE, 0, 1, 1, nil)
-	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
-	if c:IsFaceup() and c:IsRelateToEffect(e) then
+	if #g > 0 and Duel.Remove(g, POS_FACEUP, REASON_EFFECT) > 0 then
 		local e1=Effect.CreateEffect(c)
 		e1:SetType(EFFECT_TYPE_FIELD)
 		e1:SetCode(EFFECT_UPDATE_ATTACK)
