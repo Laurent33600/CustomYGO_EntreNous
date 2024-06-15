@@ -9,7 +9,7 @@ Archétypes :
 Cartes fonctionnelles :
 1 :
 	- Soupçon (023)
-	- Bouclier (004) - protection des synchro?
+	- Bouclier (004) - protection des synchro -> non
 	- Fumée (013)
 	- Alkelazir (002)
 	- 
