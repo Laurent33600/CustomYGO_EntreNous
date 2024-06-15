@@ -15,14 +15,14 @@ function s.initial_effect(c)
     e1:SetCondition(s.sprcon)
     e1:SetOperation(s.sprop)
     c:RegisterEffect(e1)
-    -- ATK reduction
+    -- ATK increase
     local e2 = Effect.CreateEffect(c)
     e2:SetDescription(aux.Stringid(id, 0))
-    e2:SetCategory(CATEGORY_ATKCHANGE + CATEGORY_REMOVE)
+    e2:SetCategory(CATEGORY_ATKCHANGE)
     e2:SetType(EFFECT_TYPE_SINGLE + EFFECT_TYPE_TRIGGER_O)
     e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-    e2:SetCondition(s.atkcon)
-    e2:SetTarget(s.atktg)
+	e2:SetRange(LOCATION_MZONE)
+    e2:SetTarget(s.target)
     e2:SetOperation(s.atkop)
     c:RegisterEffect(e2)
 end
@@ -54,21 +54,26 @@ function s.atkcon(e, tp, eg, ep, ev, re, r, rp)
     return e:GetHandler():IsSummonType(SUMMON_TYPE_SPECIAL)
 end
 
-function s.atktg(e, tp, eg, ep, ev, re, r, rp, chk)
-    if chk == 0 then return Duel.IsExistingMatchingCard(Card.IsAbleToRemove, tp, LOCATION_GRAVE, 0, 1, nil) end
-    Duel.SetOperationInfo(0, CATEGORY_REMOVE, nil, 1, tp, LOCATION_GRAVE)
+function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then
+		local g=Duel.GetDecktopGroup(tp,1)
+		local tc=g:GetFirst()
+		return tc and tc:IsAbleToRemove()
+	end
+	Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,tp,LOCATION_DECK)
 end
 
-function s.atkop(e, tp, eg, ep, ev, re, r, rp)
+function s.atkop(e,tp,eg,ep,ev,re,r,rp)
     Duel.Hint(HINT_SELECTMSG, tp, HINTMSG_REMOVE)
     local g = Duel.SelectMatchingCard(tp, Card.IsAbleToRemove, tp, LOCATION_GRAVE, 0, 1, 1, nil)
-    if #g > 0 and Duel.Remove(g, POS_FACEUP, REASON_EFFECT) > 0 then
-        local e1 = Effect.CreateEffect(e:GetHandler())
-        e1:SetType(EFFECT_TYPE_FIELD)
-        e1:SetCode(EFFECT_UPDATE_ATTACK)
+	Duel.Remove(g,POS_FACEUP,REASON_EFFECT)
+	if c:IsFaceup() and c:IsRelateToEffect(e) then
+		local e1=Effect.CreateEffect(c)
+		e1:SetType(EFFECT_TYPE_FIELD)
+		e1:SetCode(EFFECT_UPDATE_ATTACK)
         e1:SetTargetRange(0, LOCATION_MZONE)
-        e1:SetValue(-300)
-        e1:SetReset(RESET_PHASE + PHASE_END)
-        Duel.RegisterEffect(e1, tp)
-    end
+		e1:SetReset(RESET_EVENT + RESETS_STANDARD)
+		e1:SetValue(-300)
+		c:RegisterEffect(e1)
+	end
 end
