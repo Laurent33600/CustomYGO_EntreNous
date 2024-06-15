@@ -12,4 +12,4 @@ Cartes fonctionnelles :
 	- Bouclier (004) - protection des synchro -> non
 	- Fumée (013)
 	- Alkelazir (002)
-	- 
+	- Souffle (022)
